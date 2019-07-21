@@ -1,0 +1,13 @@
+{
+    "name": "itk-dev/aarhus-kommune-management-symfony-4",
+    "type": "symfony-bundle",
+    "authors": [
+        {
+            "name": "Mikkel Ricky",
+            "email": "rimi@aarhus.dk"
+        }
+    ],
+    "require": {
+        "league/oauth2-server": "^8.0"
+    }
+}
