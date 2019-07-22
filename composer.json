@@ -8,6 +8,30 @@
         }
     ],
     "require": {
-        "league/oauth2-server": "^8.0"
+        "league/oauth2-server": "^8.0",
+        "symfony/framework-bundle": "4.3.*",
+        "guzzlehttp/guzzle": "^6.3"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.15"
+    },
+    "autoload": {
+        "psr-4": {
+            "ItkDev\\AarhusKommuneManagementBundle\\": ""
+        }
+    },
+    "scripts": {
+        "check-coding-standards/php-cs-fixer": [
+            "php-cs-fixer --config=.php_cs.dist fix --dry-run"
+        ],
+        "check-coding-standards": [
+            "@check-coding-standards/php-cs-fixer"
+        ],
+        "apply-coding-standards/php-cs-fixer": [
+            "php-cs-fixer --config=.php_cs.dist fix"
+        ],
+        "apply-coding-standards": [
+            "@apply-coding-standards/php-cs-fixer"
+        ]
     }
 }

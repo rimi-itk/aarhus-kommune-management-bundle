@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<routes xmlns="http://symfony.com/schema/routing"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/routing
+        https://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <route id="aarhus_kommune_management_authenticate" path="/aarhus-kommune-management/authenticate" controller="ItkDev\AarhusKommuneManagementBundle\Controller\SecurityController::authenticate"/>
+
+    <route id="aarhus_kommune_management_users_index" path="/aarhus-kommune-management/users" controller="ItkDev\AarhusKommuneManagementBundle\Controller\UserController::index" methods="GET"/>
+
+    <route id="aarhus_kommune_management_users_update" path="/aarhus-kommune-management/users" controller="ItkDev\AarhusKommuneManagementBundle\Controller\UserController::update" methods="POST"/>
+</routes>
