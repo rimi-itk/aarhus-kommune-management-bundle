@@ -15,8 +15,15 @@ use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 
 class ClientRepository implements ClientRepositoryInterface
 {
-    const CLIENT_NAME = 'My Awesome App';
-    const REDIRECT_URI = 'http://foo/bar';
+    /**
+     * @var array
+     */
+    private $configuration;
+
+    public function __construct(array $configuration)
+    {
+        $this->configuration = $configuration;
+    }
 
     /**
      * {@inheritdoc}
@@ -26,8 +33,6 @@ class ClientRepository implements ClientRepositoryInterface
         $client = new ClientEntity();
 
         $client->setIdentifier($clientIdentifier);
-        $client->setName(self::CLIENT_NAME);
-        $client->setRedirectUri(self::REDIRECT_URI);
 
         return $client;
     }
@@ -37,25 +42,28 @@ class ClientRepository implements ClientRepositoryInterface
      */
     public function validateClient($clientIdentifier, $clientSecret, $grantType)
     {
-        $clients = [
-      'myawesomeapp' => [
-        'secret' => password_hash('abc123', PASSWORD_BCRYPT),
-        'name' => self::CLIENT_NAME,
-        'redirect_uri' => self::REDIRECT_URI,
-        'is_confidential' => true,
-      ],
-    ];
+        $clients = $this->getClients();
 
-        // Check if client is registered.
-        if (false === \array_key_exists($clientIdentifier, $clients)) {
-            return;
+        foreach ($clients as $client) {
+            if ($clientIdentifier === $client['id'] && $clientSecret === $client['secret']) {
+                return true;
+            }
         }
 
-        if (
-          true === $clients[$clientIdentifier]['is_confidential']
-          && false === password_verify($clientSecret, $clients[$clientIdentifier]['secret'])
-      ) {
-            return;
+        return false;
+    }
+
+    private function getClients()
+    {
+        if (!empty($this->configuration['clients'])) {
+            return $this->configuration['clients'];
+        } else {
+            return [
+                [
+                    'id' => $this->configuration['client_id'],
+                    'secret' => $this->configuration['client_secret'],
+                ],
+            ];
         }
     }
 }

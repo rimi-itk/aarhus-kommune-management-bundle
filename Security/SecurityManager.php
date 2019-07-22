@@ -13,10 +13,10 @@ namespace ItkDev\AarhusKommuneManagementBundle\Security;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
 use ItkDev\AarhusKommuneManagementBundle\Security\Repositories\AccessTokenRepository;
-use ItkDev\AarhusKommuneManagementBundle\Security\Repositories\ClientRepository;
 use ItkDev\AarhusKommuneManagementBundle\Security\Repositories\ScopeRepository;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Grant\ClientCredentialsGrant;
+use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 use League\OAuth2\Server\ResourceServer;
 
 class SecurityManager
@@ -27,13 +27,19 @@ class SecurityManager
     private $configuration;
 
     /**
+     * @var ClientRepositoryInterface
+     */
+    private $clientRepository;
+
+    /**
      * SecurityManager constructor.
      *
      * @param array $configuration
      */
-    public function __construct(array $configuration)
+    public function __construct(/*array */$configuration, /*ClientRepositoryInterface */$clientRepository)
     {
         $this->configuration = $configuration;
+        $this->clientRepository = $clientRepository;
     }
 
     /**
@@ -45,7 +51,6 @@ class SecurityManager
      */
     public function createToken()
     {
-        $clientRepository = new ClientRepository();
         $scopeRepository = new ScopeRepository();
         $accessTokenRepository = new AccessTokenRepository();
 
@@ -55,7 +60,7 @@ class SecurityManager
         $encryptionKey = $this->configuration['encryption_key'];
 
         $server = new AuthorizationServer(
-            $clientRepository,
+            $this->clientRepository,
             $accessTokenRepository,
             $scopeRepository,
             $privateKey,

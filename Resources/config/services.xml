@@ -8,22 +8,29 @@
         <parameter key="aarhus_kommune_management_public_key">%env(file:resolve:AARHUS_KOMMUNE_MANAGEMENT_PUBLIC_KEY)%</parameter>
         <parameter key="aarhus_kommune_management_private_key">%env(file:resolve:AARHUS_KOMMUNE_MANAGEMENT_PRIVATE_KEY)%</parameter>
         <parameter key="aarhus_kommune_management_encryption_key">%env(AARHUS_KOMMUNE_MANAGEMENT_ENCRYPTION_KEY)%</parameter>
+        <parameter key="aarhus_kommune_management_client_id">%env(AARHUS_KOMMUNE_MANAGEMENT_CLIENT_ID)%</parameter>
+        <parameter key="aarhus_kommune_management_client_secret">%env(AARHUS_KOMMUNE_MANAGEMENT_CLIENT_SECRET)%</parameter>
     </parameters>
 
     <services>
-        <service id="ItkDev\AarhusKommuneManagementBundle\Security\SecurityManager" class="ItkDev\AarhusKommuneManagementBundle\Security\SecurityManager">
+        <service id="ItkDev\AarhusKommuneManagementBundle\Security\Repositories\ClientRepository" class="ItkDev\AarhusKommuneManagementBundle\Security\Repositories\ClientRepository">
             <argument key="$configuration"/>
         </service>
 
+        <service id="ItkDev\AarhusKommuneManagementBundle\Security\SecurityManager" class="ItkDev\AarhusKommuneManagementBundle\Security\SecurityManager">
+            <argument key="$configuration"/>
+            <argument key="$clientRepository" type="service" id="ItkDev\AarhusKommuneManagementBundle\Security\Repositories\ClientRepository"/>
+        </service>
+
         <service id="ItkDev\AarhusKommuneManagementBundle\Controller\SecurityController" class="ItkDev\AarhusKommuneManagementBundle\Controller\SecurityController">
-            <argument type="service" id="ItkDev\AarhusKommuneManagementBundle\Security\SecurityManager"></argument>
+            <argument key="$securityManager" type="service" id="ItkDev\AarhusKommuneManagementBundle\Security\SecurityManager"></argument>
             <tag name="controller.service_arguments"/>
         </service>
 
         <service id="ItkDev\AarhusKommuneManagementBundle\Controller\UserController" class="ItkDev\AarhusKommuneManagementBundle\Controller\UserController">
-            <argument id="$configuration"></argument>
-            <argument type="service" id="itk_dev_aarhus_kommune_management.management.user_manager"></argument>
-            <argument type="service" id="ItkDev\AarhusKommuneManagementBundle\Security\SecurityManager"></argument>
+            <argument key="$configuration"></argument>
+            <argument key="$userManager" type="service" id="itk_dev_aarhus_kommune_management.management.user_manager"></argument>
+            <argument key="$securityManager" type="service" id="ItkDev\AarhusKommuneManagementBundle\Security\SecurityManager"></argument>
             <tag name="controller.service_arguments"/>
         </service>
 

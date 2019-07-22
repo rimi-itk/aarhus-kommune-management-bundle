@@ -11,6 +11,7 @@
 namespace ItkDev\AarhusKommuneManagementBundle\DependencyInjection;
 
 use ItkDev\AarhusKommuneManagementBundle\Controller\UserController;
+use ItkDev\AarhusKommuneManagementBundle\Security\Repositories\ClientRepository;
 use ItkDev\AarhusKommuneManagementBundle\Security\SecurityManager;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -29,10 +30,14 @@ class AarhusKommuneManagementExtension extends Extension
 
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
+
         $definition = $container->getDefinition(SecurityManager::class);
-        $definition->replaceArgument('$configuration', $config['security']);
+        $definition->replaceArgument('$configuration', $config['security'] ?? []);
+
+        $definition = $container->getDefinition(ClientRepository::class);
+        $definition->replaceArgument('$configuration', $config['security'] ?? []);
 
         $definition = $container->getDefinition(UserController::class);
-        $definition->replaceArgument(0, $config['users'] ?? []);
+        $definition->replaceArgument('$configuration', $config['users'] ?? []);
     }
 }
