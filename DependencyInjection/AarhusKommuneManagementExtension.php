@@ -10,8 +10,8 @@
 
 namespace ItkDev\AarhusKommuneManagementBundle\DependencyInjection;
 
-use ItkDev\AarhusKommuneManagementBundle\Controller\SecurityController;
 use ItkDev\AarhusKommuneManagementBundle\Controller\UserController;
+use ItkDev\AarhusKommuneManagementBundle\Security\SecurityManager;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -29,8 +29,8 @@ class AarhusKommuneManagementExtension extends Extension
 
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
-        $definition = $container->getDefinition(SecurityController::class);
-        $definition->replaceArgument(0, $config['security']);
+        $definition = $container->getDefinition(SecurityManager::class);
+        $definition->replaceArgument('$configuration', $config['security']);
 
         $definition = $container->getDefinition(UserController::class);
         $definition->replaceArgument(0, $config['users'] ?? []);

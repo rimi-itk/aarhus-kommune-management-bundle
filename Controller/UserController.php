@@ -11,6 +11,7 @@
 namespace ItkDev\AarhusKommuneManagementBundle\Controller;
 
 use ItkDev\AarhusKommuneManagementBundle\Management\AbstractUserManager;
+use ItkDev\AarhusKommuneManagementBundle\Security\SecurityManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -20,19 +21,32 @@ use Symfony\Component\HttpFoundation\Request;
 class UserController
 {
     /**
+     * @var array
+     */
+    private $configuration;
+
+    /**
      * The user manager.
      *
      * @var AbstractUserManager
      */
     private $userManager;
 
-    public function __construct(array $configuration, /*AbstractUserManager*/ $userManager)
+    /**
+     * @var SecurityManager
+     */
+    private $securityManager;
+
+    public function __construct(array $configuration, AbstractUserManager $userManager, SecurityManager $securityManager)
     {
+        $this->configuration = $configuration;
         $this->userManager = $userManager;
+        $this->securityManager = $securityManager;
     }
 
     public function index(Request $request)
     {
+        $this->securityManager->validateToken();
         $users = $this->userManager->getUsers();
 
         return new JsonResponse($users);
@@ -40,6 +54,7 @@ class UserController
 
     public function update(Request $request)
     {
+        $this->securityManager->validateToken();
         $data = json_decode($request->getContent());
 
         $result = $this->userManager->updateUser($data);

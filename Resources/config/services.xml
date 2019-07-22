@@ -11,14 +11,19 @@
     </parameters>
 
     <services>
+        <service id="ItkDev\AarhusKommuneManagementBundle\Security\SecurityManager" class="ItkDev\AarhusKommuneManagementBundle\Security\SecurityManager">
+            <argument key="$configuration"/>
+        </service>
+
         <service id="ItkDev\AarhusKommuneManagementBundle\Controller\SecurityController" class="ItkDev\AarhusKommuneManagementBundle\Controller\SecurityController">
-            <argument id="$configuration"></argument>
+            <argument type="service" id="ItkDev\AarhusKommuneManagementBundle\Security\SecurityManager"></argument>
             <tag name="controller.service_arguments"/>
         </service>
 
         <service id="ItkDev\AarhusKommuneManagementBundle\Controller\UserController" class="ItkDev\AarhusKommuneManagementBundle\Controller\UserController">
             <argument id="$configuration"></argument>
             <argument type="service" id="itk_dev_aarhus_kommune_management.management.user_manager"></argument>
+            <argument type="service" id="ItkDev\AarhusKommuneManagementBundle\Security\SecurityManager"></argument>
             <tag name="controller.service_arguments"/>
         </service>
 

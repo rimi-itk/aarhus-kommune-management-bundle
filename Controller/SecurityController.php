@@ -10,13 +10,8 @@
 
 namespace ItkDev\AarhusKommuneManagementBundle\Controller;
 
-use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\ServerRequest;
-use ItkDev\AarhusKommuneManagementBundle\Security\Repositories\AccessTokenRepository;
-use ItkDev\AarhusKommuneManagementBundle\Security\Repositories\ClientRepository;
-use ItkDev\AarhusKommuneManagementBundle\Security\Repositories\ScopeRepository;
-use League\OAuth2\Server\AuthorizationServer;
-use League\OAuth2\Server\Grant\ClientCredentialsGrant;
+use ItkDev\AarhusKommuneManagementBundle\Security\SecurityManager;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class SecurityController.
@@ -24,47 +19,20 @@ use League\OAuth2\Server\Grant\ClientCredentialsGrant;
 class SecurityController
 {
     /**
-     * The configuration.
-     *
-     * @var array
+     * @var SecurityManager
      */
-    private $configuration;
+    private $securityManager;
 
-    public function __construct(array $configuration)
+    public function __construct(SecurityManager $securityManager)
     {
-        $this->configuration = $configuration;
+        $this->securityManager = $securityManager;
     }
 
     public function authenticate()
     {
-        $clientRepository = new ClientRepository();
-        $scopeRepository = new ScopeRepository();
-        $accessTokenRepository = new AccessTokenRepository();
+        $result = $this->securityManager->createToken();
 
-        // Path to public and private keys.
-        $privateKey = $this->configuration['private_key'];
-        // Generate using base64_encode(random_bytes(32))
-        $encryptionKey = $this->configuration['encryption_key'];
-
-        $server = new AuthorizationServer(
-            $clientRepository,
-            $accessTokenRepository,
-            $scopeRepository,
-            $privateKey,
-            $encryptionKey
-        );
-
-        $server->enableGrantType(
-            new ClientCredentialsGrant(),
-            // Access tokens will expire after 1 hour.
-            new \DateInterval('PT1H')
-        );
-
-        $request = ServerRequest::fromGlobals();
-        $response = new Response();
-        $result = $server->respondToAccessTokenRequest($request, $response);
-
-        return new \Symfony\Component\HttpFoundation\Response(
+        return new Response(
             (string) $result->getBody(),
             $result->getStatusCode(),
             $result->getHeaders()
