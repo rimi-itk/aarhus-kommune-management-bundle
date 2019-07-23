@@ -44,19 +44,21 @@ class UserController
         $this->securityManager = $securityManager;
     }
 
-    public function index(Request $request)
+    public function index()
     {
         $this->securityManager->validateToken();
         $users = $this->userManager->getUsers();
 
-        return new JsonResponse($users);
+        return new JsonResponse(array_map([$this->userManager, 'serializeUser'], $users));
     }
 
     public function update(Request $request)
     {
         $this->securityManager->validateToken();
-        $data = json_decode($request->getContent());
+        $data = json_decode($request->getContent(), true);
 
         $result = $this->userManager->updateUser($data);
+
+        return new JsonResponse($result);
     }
 }

@@ -18,7 +18,7 @@ Edit `config/bundles.php`:
     …
 ```
 
-Edit `config/routes.yaml`:
+Create `config/routes/aarhus_kommune_management.yaml`:
 
 ```yaml
 aarhus_kommune_management:
