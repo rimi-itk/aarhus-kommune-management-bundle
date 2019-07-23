@@ -36,6 +36,9 @@ AARHUS_KOMMUNE_MANAGEMENT_PRIVATE_KEY='%kernel.project_dir%/private.key'
 AARHUS_KOMMUNE_MANAGEMENT_ENCRYPTION_KEY='tiaJeWd1i5x3tDrWUG6VfznY706XyDsHk/ZZPOH8eg0='
 ```
 
+**Note**: Remember to make the `.key` files readable by the web server, e.g. by
+running `chmod 660 *.key`.
+
 Extend `ItkDev\AarhusKommuneManagementBundle\Management\AbstractUserManager` to
 create your custom user manager and override the
 `itk_dev_aarhus_kommune_management.management.user_manager` service (e.g. in
