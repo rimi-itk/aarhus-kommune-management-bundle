@@ -11,6 +11,7 @@
 namespace ItkDev\AarhusKommuneManagementBundle\Controller;
 
 use ItkDev\AarhusKommuneManagementBundle\Security\SecurityManager;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -30,12 +31,16 @@ class SecurityController
 
     public function authenticate()
     {
-        $result = $this->securityManager->createToken();
+        try {
+            $result = $this->securityManager->createToken();
 
-        return new Response(
-            (string) $result->getBody(),
-            $result->getStatusCode(),
-            $result->getHeaders()
-        );
+            return new Response(
+                (string) $result->getBody(),
+                $result->getStatusCode(),
+                $result->getHeaders()
+            );
+        } catch (\Exception $exception) {
+            return new JsonResponse(['code' => $exception->getCode(), 'message' => $exception->getMessage()]);
+        }
     }
 }

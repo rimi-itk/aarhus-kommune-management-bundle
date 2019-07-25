@@ -46,19 +46,47 @@ class UserController
 
     public function index()
     {
-        $this->securityManager->validateToken();
-        $users = $this->userManager->getUsers();
+        try {
+            $this->securityManager->validateToken();
+            $users = $this->userManager->getUsers();
 
-        return new JsonResponse(array_map([$this->userManager, 'serializeUser'], $users));
+            return new JsonResponse([
+                'data' => array_map([$this->userManager, 'serializeUser'], $users),
+            ]);
+        } catch (\Exception $exception) {
+            return new JsonResponse(['code' => $exception->getCode(), 'message' => $exception->getMessage()]);
+        }
     }
 
     public function update(Request $request)
     {
-        $this->securityManager->validateToken();
-        $data = json_decode($request->getContent(), true);
+        try {
+            $this->securityManager->validateToken();
+            $payload = json_decode($request->getContent(), true);
 
-        $result = $this->userManager->updateUser($data);
+            $result = [];
 
-        return new JsonResponse($result);
+            if (isset($payload['users'])) {
+                $commands = $payload['users'];
+
+                if (isset($commands['create']) && \is_array($commands['create'])) {
+                    foreach ($commands['create'] as $item) {
+                        $user = $this->userManager->createUser($item);
+                        $result['create'][] = $user;
+                    }
+                }
+
+                if (isset($commands['update']) && \is_array($commands['update'])) {
+                    foreach ($commands['update'] as $item) {
+                        $user = $this->userManager->updateUser($item);
+                        $result['update'][] = $user;
+                    }
+                }
+            }
+
+            return new JsonResponse($result);
+        } catch (\Exception $exception) {
+            return new JsonResponse(['code' => $exception->getCode(), 'message' => $exception->getMessage()]);
+        }
     }
 }
