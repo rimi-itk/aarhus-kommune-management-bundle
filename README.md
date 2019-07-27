@@ -1,8 +1,7 @@
 # Aarhus kommune management
 
-This Symfony 4 bundle does stuff.
-
-See https://github.com/rimi-itk/aarhus-kommune-management-documentation for general documentation.
+See https://github.com/rimi-itk/aarhus-kommune-management-documentation for
+general documentation.
 
 ## Installation
 
@@ -38,6 +37,9 @@ AARHUS_KOMMUNE_MANAGEMENT_PUBLIC_KEY='%kernel.project_dir%/public.key'
 AARHUS_KOMMUNE_MANAGEMENT_PRIVATE_KEY='%kernel.project_dir%/private.key'
 # php -r 'echo base64_encode(random_bytes(32));'
 AARHUS_KOMMUNE_MANAGEMENT_ENCRYPTION_KEY='tiaJeWd1i5x3tDrWUG6VfznY706XyDsHk/ZZPOH8eg0='
+
+AARHUS_KOMMUNE_MANAGEMENT_CLIENT_ID='IYHJiGdyjZ2jSM30i+x8UVsuPILI1Jx2neBhUe/+CJM='
+AARHUS_KOMMUNE_MANAGEMENT_CLIENT_SECRET='NTS44VwldGb7o7pJ8jmcX44Mb4XcbWZJ+9Zv78Yo94A='
 ```
 
 **Note**: Remember to make the `.key` files readable by the web server, e.g. by

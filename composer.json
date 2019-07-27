@@ -9,7 +9,7 @@
     ],
     "require": {
         "league/oauth2-server": "^8.0",
-        "symfony/framework-bundle": "4.3.*",
+        "symfony/framework-bundle": "^4.3|^3.4",
         "guzzlehttp/guzzle": "^6.3"
     },
     "require-dev": {

@@ -34,7 +34,6 @@
             <tag name="controller.service_arguments"/>
         </service>
 
-        <service id="itk_dev_aarhus_kommune_management.management.user_manager" class="ItkDev\AarhusKommuneManagementBundle\Management\AbstractUserManager">
-        </service>
+        <service id="itk_dev_aarhus_kommune_management.management.user_manager" class="ItkDev\AarhusKommuneManagementBundle\Management\AbstractUserManager"/>
     </services>
 </container>
