@@ -7,7 +7,11 @@ See https://github.com/rimi-itk/aarhus-kommune-management-documentation for gene
 ## Installation
 
 ```sh
-composer require itk-dev/aarhus-kommune-management
+composer config repositories.itk-dev/aarhus-kommune-management-bundle vcs https://github.com/rimi-itk/aarhus-kommune-management-bundle
+```
+
+```sh
+composer require itk-dev/aarhus-kommune-management-bundle
 ```
 
 Edit `config/bundles.php`:
